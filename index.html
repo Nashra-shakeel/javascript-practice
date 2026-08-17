@@ -1,9 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title>Javascript Practice</title>
-    </head>
-    <body>
-        
-    </body>
+  <head>
+    <title>Javascript Practice</title>
+  </head>
+  <body>
+  </body>
+  <script>
+
+    // take person salary
+    // caluclate tax on the salary
+    // <50000 then tax 5%
+    // <100000 tax 10%
+    /// tax = 15%
+
+    // let salary = window.prompt("Enter your salary");
+    // let tax;
+    // if(salary<100000){ tax= (salary * 10) /100}
+    // else if (salary<5000) { tax= (salary * 5) /100}
+    // else{ tax= (salary * 15) /100}
+    // let finalSalary=salary-tax;
+    // document.write(finalSalary)
+
+
+    // // let var const
+    // let age = window.prompt("What is your age");
+    // if (age > 9) window.alert("You are older than 9 years");
+    // else window.alert("You are 9 years old or younger");
+    // // let myDiv = document.getElementById("info");
+    // // myDiv.innerHTML = age;
+    // document.write(age)
+
+    let students = [
+    { name: "Ali", marks: 85 },
+    { name: "Sara", marks: 72 },
+    { name: "Ahmed", marks: 91 },
+    { name: "Ayesha", marks: 65 }
+];
+analyzeStudents(students);
+function analyzeStudents(students) {
+
+    for (let student of students) {
+
+        for (let value in student) 
+        {
+            if(value==="marks")
+        {
+                if(student[value]>=80){
+                    document.write(student.name + "<br>");
+                }
+        }
+
+        }
+    }
+}
+
+  </script>
 </html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+  <head>
+    <title>change cards</title>
+    <style>
+      body {
+        margin: 20px;
+        height: 100vh;
+      }
+      button {
+        position: relative;
+        top: 0%;
+        left: 90%;
+        padding: 10px 20px;
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 10px;
+      }
+      .box {
+        width: calc(33.333% - 10px);
+        height: 30vh;
+        margin: 5px;
+        box-sizing: border-box;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+      .para {
+        font-size: 40px;
+        font-weight: 600;
+        color: aliceblue;
+      }
+      .cross {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border: none;
+        background-color: transparent;
+        background-image: url("cross.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      .colorPicker {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="button">Add</button>
+    <div class="container"></div>
+
+    <script>
+      let colors = [
+        "#FF6B6C",
+        "#FFA94D",
+        "#FFD43B",
+        "#69DB7C",
+        "#38D9A9",
+        "#74C0FC",
+        "#B197FC",
+        "#F783AC",
+        "#D0BFFF",
+      ];
+
+      let count = 0;
+      let containerEl = document.querySelector(".container");
+      for (let i = 0; i < 9; i++) {
+        // let j=i;
+        count = i + 1;
+        let cont = document.createElement("div");
+        cont.classList.add("box");
+        cont.style.backgroundColor = colors[i];
+
+        let p = document.createElement("p");
+        p.textContent = count;
+        p.classList.add("para");
+
+        let del = document.createElement("button");
+        del.classList.add("cross");
+        del.addEventListener("click", function () {
+          cont.remove();
+        });
+
+        let colorInput = document.createElement("input");
+        let currentColor = colors[i];
+        cont.style.backgroundColor = currentColor;
+        colorInput.value = currentColor;
+        colorInput.type = "color";
+        colorInput.classList.add("colorPicker");
+
+        cont.appendChild(colorInput);
+        containerEl.appendChild(cont);
+        cont.appendChild(del);
+        cont.appendChild(p);
+
+        cont.addEventListener("click", function () {
+          colorInput.click();
+        });
+
+        colorInput.addEventListener("input", function () {
+          let newColor = colorInput.value.toUpperCase();
+
+          if (colors.includes(newColor)) {
+            alert("That color is already taken.");
+            cont.style.backgroundColor = currentColor;
+            colorInput.value = currentColor;
+            return;
+          }
+          colors[i] = newColor;
+          console.log(colors)
+          cont.style.backgroundColor = newColor;
+        });
+      }
+      let button = document.querySelector("button");
+      button.addEventListener("click", function () {
+        count++;
+        let cont = document.createElement("div");
+        cont.classList.add("box");
+
+        let p = document.createElement("p");
+        p.textContent = count;
+        p.classList.add("para");
+
+        let del = document.createElement("button");
+        del.classList.add("cross");
+        del.addEventListener("click", function () {
+          cont.remove();
+          //delete colros from array when box removed??
+        });
+        cont.addEventListener("click", function () {
+          colorInput.click();
+        });
+        let colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.classList.add("colorPicker");
+
+        colorInput.addEventListener("input", function () {
+          let newColor = colorInput.value.toUpperCase();
+
+          if (colors.includes(newColor)) {
+            alert("That color is already taken.");
+            cont.remove();
+            count--;
+            return;
+          }
+          colors.push(newColor);
+          cont.style.backgroundColor = newColor;
+          // remove the color selector from screen??
+        });
+
+        cont.appendChild(colorInput);
+        containerEl.appendChild(cont);
+        cont.appendChild(del);
+        cont.appendChild(p);
+        colorInput.click();
+      });
+    </script>
+  </body>
+</html>
