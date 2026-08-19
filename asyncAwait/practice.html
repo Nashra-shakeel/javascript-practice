@@ -102,8 +102,8 @@
   <body>
     <button class="button">Add</button>
     <div class="container"></div>
-    <div class="container1"></div>
-    <div class="container2"></div>
+    <div class="containerShowComments"></div>
+    <div class="containerPosts"></div>
     <div class="containerComments"></div>
   </body>
 
@@ -112,9 +112,18 @@
     button.addEventListener("click", function () {
       newPosts();
     });
-    async function newComments(postID) {
+    async function newComments(postID)
+    {
       let containerComments = document.querySelector(".containerComments");
       containerComments.style.display = "";
+
+      let newCommentContainer = document.createElement("div");
+      newCommentContainer.classList.add("commentBox");
+
+      let title = document.createElement("p");
+      title.textContent = "Add New Comment";
+      title.classList.add("title");
+      newCommentContainer.appendChild(title);
 
       let name = document.createElement("input");
       name.type = "text";
@@ -122,8 +131,8 @@
       let nameLabel = document.createElement("label");
       nameLabel.textContent = "Enter Name";
       nameLabel.classList.add(".label");
-      containerComments.appendChild(nameLabel);
-      containerComments.appendChild(name);
+      newCommentContainer.appendChild(nameLabel);
+      newCommentContainer.appendChild(name);
 
       let email = document.createElement("input");
       email.type = "text";
@@ -131,8 +140,8 @@
       let emailLabel = document.createElement("label");
       emailLabel.textContent = "Enter Email";
       emailLabel.classList.add("label");
-      containerComments.appendChild(emailLabel);
-      containerComments.appendChild(email);
+      newCommentContainer.appendChild(emailLabel);
+      newCommentContainer.appendChild(email);
 
       let body = document.createElement("input");
       body.type = "text";
@@ -140,12 +149,16 @@
       let bodyLabel = document.createElement("label");
       bodyLabel.textContent = "Enter body";
       bodyLabel.classList.add("label");
-      containerComments.appendChild(bodyLabel);
-      containerComments.appendChild(body);
+      newCommentContainer.appendChild(bodyLabel);
+      newCommentContainer.appendChild(body);
 
       let submitButton = document.createElement("button");
-      button.textContent = "submit";
-      button.addEventListener("click", async function () {
+      submitButton.textContent = "submit";
+      submitButton.classList.add("button");
+      newCommentContainer.appendChild(submitButton);
+
+      containerComments.appendChild(newCommentContainer);
+      submitButton.addEventListener("click", async function () {
         try {
           const response = await fetch(
             "https://jsonplaceholder.typicode.com/comments",
@@ -155,7 +168,7 @@
                 postId: postID,
                 name: name.value,
                 email: email.value,
-                body: { body },
+                body: body.value,
               }),
               headers: {
                 "Content-type": "application/json; charset=UTF-8",
@@ -163,8 +176,11 @@
             },
           );
           if (!response.ok) {
-            container3.removeChild(name);
             throw new Error("Network error");
+          }
+          else{
+            containerComments.removeChild(newCommentContainer);
+            renderPosts();
           }
         } catch (error) {
           alert("Failed to load new comments.");
@@ -174,8 +190,8 @@
       });
     }
     async function newPosts() {
-      let container2 = document.querySelector(".container2");
-      container2.style.display = "";
+      let containerPosts = document.querySelector(".containerPosts");
+      containerPosts.style.display = "";
       try {
         const response = await fetch(
           "https://jsonplaceholder.typicode.com/posts",
@@ -210,7 +226,7 @@
         cont.appendChild(title);
         cont.appendChild(p);
 
-        container2.appendChild(cont);
+        containerPosts.appendChild(cont);
       } catch (error) {
         alert("Failed to load New Posts.");
 
@@ -229,9 +245,9 @@
           throw new Error("Network error");
         }
 
-        const comments = await response.json();
+        const posts = await response.json();
 
-        comments.forEach((element, i) => {
+        posts.forEach((element, i) => {
           let cont = document.createElement("div");
           cont.classList.add("box");
           let postID = element.id;
@@ -279,8 +295,11 @@
       }
     }
     async function renderComments(postID) {
-      let container1 = document.querySelector(".container1");
-      container1.style.display = "";
+      let containerShowComments = document.querySelector(
+        ".containerShowComments",
+      );
+      containerShowComments.style.display = "";
+
       try {
         const response = await fetch(
           `https://jsonplaceholder.typicode.com/comments?postId=${postID}`,
@@ -289,10 +308,11 @@
           throw new Error("Network error");
         }
         const comment = await response.json();
-        let cont = document.createElement("div");
-        cont.classList.add("commentBox");
 
         comment.forEach((element, i) => {
+          let cont = document.createElement("div");
+          cont.classList.add("commentBox");
+
           let name = document.createElement("p");
           name.textContent = element.name;
           name.classList.add("title");
@@ -309,14 +329,14 @@
           del.classList.add("cross");
           del.addEventListener("click", function () {
             renderPosts();
-            container1.style.display = "none";
+            containerShowComments.style.display = "none";
           });
 
           cont.appendChild(name);
           cont.appendChild(email);
           cont.appendChild(p);
-          container1.appendChild(del);
-          container1.appendChild(cont);
+          containerShowComments.appendChild(del);
+          containerShowComments.appendChild(cont);
         });
       } catch (error) {
         alert("Failed to load comments.");
